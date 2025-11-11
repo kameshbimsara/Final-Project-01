@@ -37,7 +37,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner save = bizOwnerRepo.save(bizOwner);
 
         // generate token dynamically
-        String token = jwtUtil.generateToken(save.getUsername());
+        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
 
         return new BizOwnerDto(save.getId(), save.getName(), save.getUsername(), save.getPassword(), save.getBusiness().getId(), token);
     }
@@ -57,10 +57,11 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         bizOwner.setBusiness(business);
         BizOwner updated = bizOwnerRepo.save(bizOwner);
 
-        String token = jwtUtil.generateToken(updated.getUsername());
+        String token = jwtUtil.generateToken(updated.getUsername(), "BIZ_OWNER");
 
         return new BizOwnerDtoReturn(updated.getId(), updated.getName(), updated.getUsername(), token);
     }
+
 
     @Transactional
     @Override
@@ -70,7 +71,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
         bizOwnerRepo.deleteById(id);
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername());
+        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
 
         return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), bizOwner.getBusiness().getId(), token);
     }
@@ -80,7 +81,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner bizOwner = bizOwnerRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("BizOwner not found"));
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername());
+        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
 
         return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), bizOwner.getBusiness().getId(), token);
     }
@@ -88,8 +89,14 @@ public class BizOwnerServiceImpl implements BizOwnerService {
     @Override
     public List<BizOwnerDtoReturn> getAllBizOwners() {
         return bizOwnerRepo.findAll().stream()
-                .map(owner -> new BizOwnerDtoReturn(owner.getId(), owner.getName(), owner.getUsername(),
-                        jwtUtil.generateToken(owner.getUsername())))
+                .map(owner -> new BizOwnerDtoReturn(
+                        owner.getId(),
+                        owner.getName(),
+                        owner.getUsername(),
+                        jwtUtil.generateToken(owner.getUsername(), "BIZ_OWNER")
+                ))
                 .collect(Collectors.toList());
     }
+
+
 }

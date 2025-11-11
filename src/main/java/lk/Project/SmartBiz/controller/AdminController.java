@@ -1,10 +1,12 @@
 package lk.Project.SmartBiz.controller;
 
 import lk.Project.SmartBiz.dto.AdminDto;
+import lk.Project.SmartBiz.dto.AdminLoginDto;
+import lk.Project.SmartBiz.dto.AdminLoginResponseDto;
 import lk.Project.SmartBiz.service.AdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -13,33 +15,19 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    @Autowired
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
-    @PostMapping
-    public AdminDto saveAdmin(@RequestBody AdminDto dto) {
-        return adminService.saveAdmin(dto);
+    @PostMapping("/save")
+    public ResponseEntity<AdminDto> saveAdmin(@RequestBody AdminDto adminDto) {
+        return ResponseEntity.ok(adminService.saveAdmin(adminDto));
     }
 
-    @PutMapping("/{id}")
-    public AdminDto updateAdmin(@PathVariable Integer id, @RequestBody AdminDto dto) {
-        dto.setId(id);
-        return adminService.updateAdmin(dto);
+    @PostMapping("/login")
+    public AdminLoginResponseDto login(@RequestBody AdminLoginDto adminLoginDto) {
+        return adminService.login(adminLoginDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteAdmin(@PathVariable Integer id) {
-        adminService.deleteAdmin(id);
-    }
-
-    @GetMapping("/{id}")
-    public AdminDto getAdminById(@PathVariable Integer id) {
-        return adminService.getAdminById(id);
-    }
-
-    @GetMapping
-    public List<AdminDto> getAllAdmins() {
-        return adminService.getAllAdmins();
-    }
 }

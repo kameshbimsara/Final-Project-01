@@ -1,72 +1,70 @@
 package lk.Project.SmartBiz.service.impl;
 
 import lk.Project.SmartBiz.dto.AdminDto;
+import lk.Project.SmartBiz.dto.AdminLoginDto;
+import lk.Project.SmartBiz.dto.AdminLoginResponseDto;
 import lk.Project.SmartBiz.entity.Admin;
+import lk.Project.SmartBiz.entity.Business;
 import lk.Project.SmartBiz.repo.AdminRepo;
+import lk.Project.SmartBiz.repo.BusinessRepo;
 import lk.Project.SmartBiz.service.AdminService;
 import lk.Project.SmartBiz.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
-    private final AdminRepo adminRepo;
+
+
     private final JwtUtil jwtUtil;
 
-    public AdminServiceImpl(AdminRepo adminRepo, JwtUtil jwtUtil) {
+    private final AdminRepo adminRepo;
+    private final BusinessRepo businessRepo;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public AdminServiceImpl(AdminRepo adminRepo, BusinessRepo businessRepo,JwtUtil jwtUtil) {
         this.adminRepo = adminRepo;
+        this.businessRepo = businessRepo;
+        this.passwordEncoder = new BCryptPasswordEncoder();
         this.jwtUtil = jwtUtil;
     }
 
     @Override
-    public AdminDto saveAdmin(AdminDto dto) {
-        // save admin to DB
-        Admin admin = new Admin(null, dto.getUsername(), dto.getEmail(), dto.getPassword());
-        Admin saved = adminRepo.save(admin);
+    public AdminDto saveAdmin(AdminDto adminDto) {
+        Optional<Business> businessOptional = businessRepo.findById(adminDto.getBusinessId());
+        if (businessOptional.isEmpty()) {
+            throw new RuntimeException("Business not found with ID: " + adminDto.getBusinessId());
+        }
 
-        // generate JWT dynamically
-        String token = jwtUtil.generateToken(saved.getEmail());
+        Admin admin = new Admin();
+        admin.setUsername(adminDto.getUsername());
+        admin.setEmail(adminDto.getEmail());
+        admin.setPassword(passwordEncoder.encode(adminDto.getPassword())); // hash password
+        admin.setBusiness(businessOptional.get());
 
-        return new AdminDto(saved.getId(), saved.getUsername(), saved.getEmail(), saved.getPassword(), token);
+        Admin save = adminRepo.save(admin);
+        return new AdminDto(save.getUsername(),save.getEmail(),save.getPassword(),save.getBusiness().getId());
+
     }
+
+
 
     @Override
-    public AdminDto updateAdmin(AdminDto dto) {
-        Admin existing = adminRepo.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("Admin not found"));
+    public AdminLoginResponseDto login(AdminLoginDto adminLoginDto) {
+        Admin admin = adminRepo.findByUsername(adminLoginDto.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
-        existing.setUsername(dto.getUsername());
-        existing.setEmail(dto.getEmail());
-        existing.setPassword(dto.getPassword());
-        Admin updated = adminRepo.save(existing);
+        if (!passwordEncoder.matches(adminLoginDto.getPassword(), admin.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
 
-        String token = jwtUtil.generateToken(updated.getEmail());
-
-        return new AdminDto(updated.getId(), updated.getUsername(), updated.getEmail(), updated.getPassword(), token);
+        String token = jwtUtil.generateToken(admin.getUsername(), "ADMIN");
+        return new AdminLoginResponseDto(admin.getUsername(), token);
     }
 
-    @Override
-    public void deleteAdmin(Integer id) {
-        adminRepo.deleteById(id);
-    }
-
-    @Override
-    public AdminDto getAdminById(Integer id) {
-        Admin admin = adminRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Admin not found"));
-
-        String token = jwtUtil.generateToken(admin.getEmail());
-
-        return new AdminDto(admin.getId(), admin.getUsername(), admin.getEmail(), admin.getPassword(), token);
-    }
-
-    @Override
-    public List<AdminDto> getAllAdmins() {
-        return adminRepo.findAll().stream()
-                .map(a -> new AdminDto(a.getId(), a.getUsername(), a.getEmail(), a.getPassword(),
-                        jwtUtil.generateToken(a.getEmail())))
-                .toList();
-    }
 }

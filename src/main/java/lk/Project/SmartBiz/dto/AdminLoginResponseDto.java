@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AdminDto {
+public class AdminLoginResponseDto {
     private String username;
-    private String email;
-    private String password;
-    private Integer businessId; // link to business
+    private String token;
 }
