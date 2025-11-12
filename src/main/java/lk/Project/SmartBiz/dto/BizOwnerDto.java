@@ -13,5 +13,5 @@ public class BizOwnerDto {
     private String username;
     private String password;
     private Integer business_id;
-    private String token; // dynamically generated, not stored
+    private String token;
 }

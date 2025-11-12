@@ -45,7 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
         existing.setName(dto.getName());
         existing.setPhone(dto.getPhone());
 
-        // Optionally update business link
         if (dto.getBusinessId() != null && !dto.getBusinessId().equals(existing.getBusiness().getId())) {
             Business business = businessRepo.findById(dto.getBusinessId())
                     .orElseThrow(() -> new RuntimeException("Business not found"));

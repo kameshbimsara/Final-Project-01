@@ -6,6 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AdminLoginResponseDto {
-    private String username;
     private String token;
 }

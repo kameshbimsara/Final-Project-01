@@ -25,7 +25,6 @@ public class BizSuppler {
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    // ✅ Custom constructor (without products list)
     public BizSuppler(Integer id, String companyName, String contactNo, Business business) {
         this.id = id;
         this.companyName = companyName;

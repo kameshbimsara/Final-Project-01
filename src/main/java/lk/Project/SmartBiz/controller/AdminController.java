@@ -3,6 +3,7 @@ package lk.Project.SmartBiz.controller;
 import lk.Project.SmartBiz.dto.AdminDto;
 import lk.Project.SmartBiz.dto.AdminLoginDto;
 import lk.Project.SmartBiz.dto.AdminLoginResponseDto;
+import lk.Project.SmartBiz.dto.AdminResponseDto;
 import lk.Project.SmartBiz.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AdminController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<AdminDto> saveAdmin(@RequestBody AdminDto adminDto) {
+    public ResponseEntity<AdminResponseDto> saveAdmin(@RequestBody AdminDto adminDto) {
         return ResponseEntity.ok(adminService.saveAdmin(adminDto));
     }
 
@@ -29,5 +30,4 @@ public class AdminController {
     public AdminLoginResponseDto login(@RequestBody AdminLoginDto adminLoginDto) {
         return adminService.login(adminLoginDto);
     }
-
 }

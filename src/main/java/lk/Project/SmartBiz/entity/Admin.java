@@ -25,8 +25,4 @@ public class Admin {
     @Column(nullable = false)
     private String password;
 
-    // Many Admins belong to one Business
-    @ManyToOne
-    @JoinColumn(name = "business_id", nullable = false)
-    private Business business;
 }

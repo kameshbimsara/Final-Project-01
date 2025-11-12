@@ -12,7 +12,6 @@ import lk.Project.SmartBiz.util.JwtUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +35,6 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(), bizOwnerDto.getPassword(), business);
         BizOwner save = bizOwnerRepo.save(bizOwner);
 
-        // generate token dynamically
         String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
 
         return new BizOwnerDto(save.getId(), save.getName(), save.getUsername(), save.getPassword(), save.getBusiness().getId(), token);

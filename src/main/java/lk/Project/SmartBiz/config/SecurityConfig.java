@@ -1,18 +1,23 @@
 package lk.Project.SmartBiz.config;
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public FilterRegistrationBean<JwtFilter> jwtFilterRegistration(JwtFilter jwtFilter) {
-        FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(jwtFilter);
-        registrationBean.addUrlPatterns("/api/v1/business/*");
-        registrationBean.setOrder(1);
-        return registrationBean;
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/admin/login", "/api/v1/admin/save").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(httpBasic -> httpBasic.disable());
+
+        return http.build();
     }
 }

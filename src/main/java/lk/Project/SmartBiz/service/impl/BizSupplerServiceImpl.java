@@ -1,6 +1,5 @@
 package lk.Project.SmartBiz.service.impl;
 
-import lk.Project.SmartBiz.dto.BizOwnerDto;
 import lk.Project.SmartBiz.dto.BizSupplerDto;
 import lk.Project.SmartBiz.entity.BizSuppler;
 import lk.Project.SmartBiz.entity.Business;

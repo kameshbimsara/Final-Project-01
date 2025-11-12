@@ -13,14 +13,13 @@ public class Batch {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;  // batch ID
+    private Integer id;
 
     private LocalDate manufactureDate;
     private LocalDate expireDate;
     private Double unitPrice;
     private Integer quantity;
 
-    // Many batches belong to one product
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;

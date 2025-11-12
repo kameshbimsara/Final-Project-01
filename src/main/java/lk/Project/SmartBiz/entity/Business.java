@@ -19,10 +19,6 @@ public class Business {
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Customer> customers;
 
-    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Admin> admins;
-
-    // ✅ Custom constructor to allow new Business(null, "Name")
     public Business(Integer id, String name) {
         this.id = id;
         this.name = name;
