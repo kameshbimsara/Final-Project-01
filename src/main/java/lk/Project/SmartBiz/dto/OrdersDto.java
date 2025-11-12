@@ -15,7 +15,6 @@ public class OrdersDto {
     private Integer totalAmount;
     private List<OrderDetailsDto> orderDetails;
 
-    // ✅ Optional shorter constructor for convenience
     public OrdersDto(Integer id, Integer customerId, Integer totalAmount) {
         this.id = id;
         this.customerId = customerId;

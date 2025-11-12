@@ -10,5 +10,5 @@ public class BatchDto {
     private LocalDate expireDate;
     private Double unitPrice;
     private Integer quantity;
-    private Integer productId; // Foreign key to Product
+    private Integer productId;
 }

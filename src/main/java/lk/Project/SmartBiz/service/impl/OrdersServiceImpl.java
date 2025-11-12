@@ -25,7 +25,6 @@ public class OrdersServiceImpl implements OrdersService {
         this.orderDetailsRepo = orderDetailsRepo;
     }
 
-    // ✅ Save order + order details (transaction-like)
     @Override
     public OrdersDto saveOrder(OrdersDto dto) {
         Customer customer = customerRepo.findById(dto.getCustomerId())
@@ -38,7 +37,6 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders savedOrder = ordersRepo.save(order);
 
-        // ✅ Save order details and update product quantities
         if (dto.getOrderDetails() != null) {
             for (OrderDetailsDto detailDto : dto.getOrderDetails()) {
                 Product product = productRepo.findById(detailDto.getProductId())
@@ -48,11 +46,9 @@ public class OrdersServiceImpl implements OrdersService {
                     throw new RuntimeException("Insufficient stock for product: " + product.getName());
                 }
 
-                // Decrease product quantity
                 product.setQuantity(product.getQuantity() - detailDto.getQuantity());
                 productRepo.save(product);
 
-                // Save order details
                 OrderDetails orderDetails = new OrderDetails();
                 orderDetails.setOrder(savedOrder);
                 orderDetails.setProduct(product);
@@ -71,7 +67,6 @@ public class OrdersServiceImpl implements OrdersService {
         );
     }
 
-    // ✅ Update order
     @Override
     public OrdersDto updateOrder(Integer id, OrdersDto dto) {
         Orders order = ordersRepo.findById(id)
@@ -84,7 +79,6 @@ public class OrdersServiceImpl implements OrdersService {
         return new OrdersDto(order.getId(), order.getCustomer().getId(), order.getDate(), order.getTotalAmount(), dto.getOrderDetails());
     }
 
-    // ✅ Delete order
     @Override
     public void deleteOrder(Integer id) {
         Orders order = ordersRepo.findById(id)
@@ -92,7 +86,6 @@ public class OrdersServiceImpl implements OrdersService {
         ordersRepo.delete(order);
     }
 
-    // ✅ Get by ID
     @Override
     public OrdersDto getOrderById(Integer id) {
         Orders order = ordersRepo.findById(id)
@@ -111,7 +104,6 @@ public class OrdersServiceImpl implements OrdersService {
         return new OrdersDto(order.getId(), order.getCustomer().getId(), order.getDate(), order.getTotalAmount(), details);
     }
 
-    // ✅ Get all orders
     @Override
     public List<OrdersDto> getAllOrders() {
         return ordersRepo.findAll().stream()

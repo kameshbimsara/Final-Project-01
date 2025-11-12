@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BatchRepo extends JpaRepository<Batch, Integer> {
-    List<Batch> findByProductId(Integer productId);
     List<Batch> findByProduct(Product product);
 }

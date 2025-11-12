@@ -38,7 +38,6 @@ public class BatchServiceImpl implements BatchService {
 
         Batch saved = batchRepo.save(batch);
 
-        // ✅ Add batch quantity to product
         product.setQuantity(product.getQuantity() + dto.getQuantity());
         productRepo.save(product);
 
@@ -54,7 +53,6 @@ public class BatchServiceImpl implements BatchService {
 
         Product product = existing.getProduct();
 
-        // ✅ Adjust product quantity by difference
         int quantityDiff = dto.getQuantity() - existing.getQuantity();
         product.setQuantity(product.getQuantity() + quantityDiff);
         productRepo.save(product);

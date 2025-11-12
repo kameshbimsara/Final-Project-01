@@ -1,8 +1,6 @@
 package lk.Project.SmartBiz.service;
 
-import lk.Project.SmartBiz.dto.BizOwnerDto;
 import lk.Project.SmartBiz.dto.BizSupplerDto;
-import lk.Project.SmartBiz.entity.BizSuppler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package lk.Project.SmartBiz.service;
 
 import lk.Project.SmartBiz.dto.BusinessDto;
-import lk.Project.SmartBiz.entity.Business;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

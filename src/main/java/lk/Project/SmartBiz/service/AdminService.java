@@ -1,14 +1,12 @@
 package lk.Project.SmartBiz.service;
 
 import lk.Project.SmartBiz.dto.AdminDto;
-
-import java.util.List;
+import lk.Project.SmartBiz.dto.AdminLoginDto;
+import lk.Project.SmartBiz.dto.AdminLoginResponseDto;
+import lk.Project.SmartBiz.dto.AdminResponseDto;
+import lk.Project.SmartBiz.entity.Admin;
 
 public interface AdminService {
-
-    AdminDto saveAdmin(AdminDto dto);
-    AdminDto updateAdmin(AdminDto dto);
-    void deleteAdmin(Integer id);
-    AdminDto getAdminById(Integer id);
-    List<AdminDto> getAllAdmins();
+    AdminResponseDto saveAdmin(AdminDto adminDto);
+    AdminLoginResponseDto login(AdminLoginDto adminLoginDto);
 }
