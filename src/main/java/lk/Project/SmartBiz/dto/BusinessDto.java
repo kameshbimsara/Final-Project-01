@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class BusinessDto {
     private Integer id;
     private String name;
-
+    private String type;
+    private Integer owner_id;
 }

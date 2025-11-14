@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -17,7 +19,6 @@ public class BizOwner {
     private String username;
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "business_id", referencedColumnName = "id", nullable = false, unique = true)
-    private Business business;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Business> businesses;
 }

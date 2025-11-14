@@ -29,15 +29,12 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
     @Override
     public BizOwnerDto saveBizOwner(BizOwnerDto bizOwnerDto) {
-        Business business = businessRepo.findById(bizOwnerDto.getBusiness_id())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(), bizOwnerDto.getPassword(), business);
+        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(), bizOwnerDto.getPassword(),null);
         BizOwner save = bizOwnerRepo.save(bizOwner);
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
+        String token = jwtUtil.generateToken(bizOwner.getUsername(), "OWNER");
 
-        return new BizOwnerDto(save.getId(), save.getName(), save.getUsername(), save.getPassword(), save.getBusiness().getId(), token);
+        return new BizOwnerDto(save.getId(), save.getName(), save.getUsername(), save.getPassword(),token);
     }
 
     @Override
@@ -49,15 +46,9 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         bizOwner.setUsername(bizOwnerDto.getUsername());
         bizOwner.setPassword(bizOwnerDto.getPassword());
 
-        Business business = businessRepo.findById(bizOwnerDto.getBusiness_id())
-                .orElseThrow(() -> new RuntimeException("Business not found"));
-
-        bizOwner.setBusiness(business);
         BizOwner updated = bizOwnerRepo.save(bizOwner);
 
-        String token = jwtUtil.generateToken(updated.getUsername(), "BIZ_OWNER");
-
-        return new BizOwnerDtoReturn(updated.getId(), updated.getName(), updated.getUsername(), token);
+        return new BizOwnerDtoReturn(updated.getId(), updated.getName(), updated.getUsername());
     }
 
 
@@ -69,9 +60,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
         bizOwnerRepo.deleteById(id);
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
-
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), bizOwner.getBusiness().getId(), token);
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(),null);
     }
 
     @Override
@@ -79,9 +68,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner bizOwner = bizOwnerRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("BizOwner not found"));
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername(), "BIZ_OWNER");
-
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), bizOwner.getBusiness().getId(), token);
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), null);
     }
 
     @Override
@@ -90,8 +77,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
                 .map(owner -> new BizOwnerDtoReturn(
                         owner.getId(),
                         owner.getName(),
-                        owner.getUsername(),
-                        jwtUtil.generateToken(owner.getUsername(), "BIZ_OWNER")
+                        owner.getUsername()
                 ))
                 .collect(Collectors.toList());
     }

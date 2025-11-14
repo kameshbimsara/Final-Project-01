@@ -21,6 +21,10 @@ public class Product {
     private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private BizSuppler supplier;
 

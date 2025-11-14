@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/bizowner")
+@RequestMapping("/api/v1/business/biz/bizowner")
 @CrossOrigin
 public class BizOwnerController {
 

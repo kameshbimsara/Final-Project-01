@@ -15,6 +15,11 @@ public class Business {
     private Integer id;
 
     private String name;
+    private String type;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private BizOwner owner;
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Customer> customers;

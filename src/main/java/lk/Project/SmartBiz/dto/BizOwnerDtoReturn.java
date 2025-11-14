@@ -11,5 +11,4 @@ public class BizOwnerDtoReturn {
     private Integer id;
     private String name;
     private String username;
-    private String token;
 }

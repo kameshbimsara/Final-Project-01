@@ -30,13 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Missing Authorization header or invalid format");
+            filterChain.doFilter(request, response);
             return;
         }
-
         String token = authHeader.substring(7);
 
         try {
@@ -45,13 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String role = claims.get("role", String.class);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                List<SimpleGrantedAuthority> authorities =
-                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
-
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
@@ -62,10 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.getWriter().write("Invalid or expired token");
         }
     }
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/api/v1/admin/login") || path.startsWith("/api/v1/admin/save");
-    }
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+    return path.startsWith("/api/v1/admin/login") || path.startsWith("/api/v1/admin/save") || path.startsWith("/api/v1/owner/save");
+}
+
 }
