@@ -1,5 +1,7 @@
 package lk.Project.SmartBiz.service;
 
+import lk.Project.SmartBiz.dto.BizOwnerLoginRequest;
+import lk.Project.SmartBiz.dto.BizOwnerLoginResponse;
 import lk.Project.SmartBiz.dto.BusinessDto;
 import org.springframework.stereotype.Service;
 
@@ -12,4 +14,5 @@ public interface BusinessService {
     BusinessDto deleteBusiness(Integer id);
     BusinessDto getBusinessById(Integer id);
     List<BusinessDto> getAllBusiness();
+
 }

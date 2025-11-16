@@ -3,12 +3,14 @@ package lk.Project.SmartBiz.service.impl;
 import jakarta.transaction.Transactional;
 import lk.Project.SmartBiz.dto.BizOwnerDto;
 import lk.Project.SmartBiz.dto.BizOwnerDtoReturn;
+import lk.Project.SmartBiz.dto.BizOwnerLoginRequest;
+import lk.Project.SmartBiz.dto.BizOwnerLoginResponse;
 import lk.Project.SmartBiz.entity.BizOwner;
-import lk.Project.SmartBiz.entity.Business;
 import lk.Project.SmartBiz.repo.BizOwnerRepo;
 import lk.Project.SmartBiz.repo.BusinessRepo;
 import lk.Project.SmartBiz.service.BizOwnerService;
 import lk.Project.SmartBiz.util.JwtUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,23 +20,27 @@ import java.util.stream.Collectors;
 public class BizOwnerServiceImpl implements BizOwnerService {
 
     private final BizOwnerRepo bizOwnerRepo;
-    private final BusinessRepo businessRepo;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
-    public BizOwnerServiceImpl(BizOwnerRepo bizOwnerRepo, BusinessRepo businessRepo, JwtUtil jwtUtil) {
+    public BizOwnerServiceImpl(BizOwnerRepo bizOwnerRepo, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.bizOwnerRepo = bizOwnerRepo;
-        this.businessRepo = businessRepo;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public BizOwnerDto saveBizOwner(BizOwnerDto bizOwnerDto) {
-        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(), bizOwnerDto.getPassword(),null);
+    public BizOwnerDtoReturn saveBizOwner(BizOwnerDto bizOwnerDto) {
+        if (bizOwnerRepo.findByUsername(bizOwnerDto.getUsername()).isPresent()) {
+            throw new RuntimeException("Username already taken");
+        }
+
+        String encoded = passwordEncoder.encode(bizOwnerDto.getPassword());
+
+        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(),encoded,null);
         BizOwner save = bizOwnerRepo.save(bizOwner);
 
-        String token = jwtUtil.generateToken(bizOwner.getUsername(), "OWNER");
-
-        return new BizOwnerDto(save.getId(), save.getName(), save.getUsername(), save.getPassword(),token);
+        return new BizOwnerDtoReturn(save.getId(), save.getName(), save.getUsername());
     }
 
     @Override
@@ -60,7 +66,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
         bizOwnerRepo.deleteById(id);
 
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(),null);
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword());
     }
 
     @Override
@@ -68,7 +74,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner bizOwner = bizOwnerRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("BizOwner not found"));
 
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword(), null);
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword());
     }
 
     @Override
@@ -81,6 +87,24 @@ public class BizOwnerServiceImpl implements BizOwnerService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public BizOwnerLoginResponse login(BizOwnerLoginRequest request) {
+
+        BizOwner owner = bizOwnerRepo.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), owner.getPassword())) {
+            throw new RuntimeException("Invalid username or password");
+        }
+
+        String token = jwtUtil.generateToken(owner.getUsername(), "OWNER");
+
+        return new BizOwnerLoginResponse(
+                token
+        );
+    }
+
 
 
 }

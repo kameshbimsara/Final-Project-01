@@ -12,5 +12,4 @@ public class BizOwnerDto {
     private String name;
     private String username;
     private String password;
-    private String token;
 }

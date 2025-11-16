@@ -77,4 +77,5 @@ public class BusinessServiceImpl implements BusinessService {
                 .map(business -> new BusinessDto(business.getId(), business.getName(),business.getType(), business.getOwner().getId()))
                 .toList();
     }
+
 }

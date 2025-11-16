@@ -2,6 +2,8 @@ package lk.Project.SmartBiz.controller;
 
 import lk.Project.SmartBiz.dto.BizOwnerDto;
 import lk.Project.SmartBiz.dto.BizOwnerDtoReturn;
+import lk.Project.SmartBiz.dto.BizOwnerLoginRequest;
+import lk.Project.SmartBiz.dto.BizOwnerLoginResponse;
 import lk.Project.SmartBiz.service.BizOwnerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,7 @@ public class BizOwnerController {
     }
 
     @PostMapping
-    public BizOwnerDto addBizOwner(@RequestBody BizOwnerDto bizOwnerDto) {
+    public BizOwnerDtoReturn addBizOwner(@RequestBody BizOwnerDto bizOwnerDto) {
         return bizOwnerService.saveBizOwner(bizOwnerDto);
     }
 
@@ -46,4 +48,10 @@ public class BizOwnerController {
     public List<BizOwnerDtoReturn> getAllOwners() {
         return bizOwnerService.getAllBizOwners();
     }
+
+    @PostMapping("/login")
+    public BizOwnerLoginResponse login(@RequestBody BizOwnerLoginRequest request) {
+        return bizOwnerService.login(request);
+    }
+
 }
