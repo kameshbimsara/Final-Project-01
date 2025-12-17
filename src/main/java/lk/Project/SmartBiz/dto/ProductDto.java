@@ -9,6 +9,7 @@ public class ProductDto {
     private String name;
     private String description;
     private Integer quantity;
+    private Integer businessId;
     private Integer supplierId;
 
     public ProductDto(Integer id, String name, String brand, String description, Integer quantity) {
@@ -18,6 +19,4 @@ public class ProductDto {
         this.description = description;
         this.quantity = quantity;
     }
-
-
 }

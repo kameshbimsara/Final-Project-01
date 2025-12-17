@@ -10,9 +10,11 @@ import java.util.List;
 @Service
 public interface BusinessService {
     BusinessDto saveBusiness(BusinessDto businessDto);
-    BusinessDto updateBusiness(BusinessDto businessDto);
+    BusinessDto updateBusiness(Integer id, BusinessDto businessDto);
     BusinessDto deleteBusiness(Integer id);
     BusinessDto getBusinessById(Integer id);
     List<BusinessDto> getAllBusiness();
+    List<BusinessDto> getBusinessByOwnerId(Integer ownerId);
+
 
 }

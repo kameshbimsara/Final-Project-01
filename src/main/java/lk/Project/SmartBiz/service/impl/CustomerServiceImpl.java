@@ -80,4 +80,13 @@ public class CustomerServiceImpl implements CustomerService {
         dto.setBusinessId(c.getBusiness().getId());
         return dto;
     }
+
+    @Override
+    public CustomerDto getCustomerByName(String name) {
+        Customer c = customerRepo.findByName(name)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        return toDto(c);
+    }
+
+
 }

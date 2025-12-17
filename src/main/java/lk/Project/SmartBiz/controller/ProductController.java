@@ -2,6 +2,7 @@ package lk.Project.SmartBiz.controller;
 
 import lk.Project.SmartBiz.dto.ProductDto;
 import lk.Project.SmartBiz.service.ProductService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductDto getProductById(@PathVariable Integer id) {
+    public ProductDto getProduct(@PathVariable Integer id) {
         return productService.getProductById(id);
     }
 

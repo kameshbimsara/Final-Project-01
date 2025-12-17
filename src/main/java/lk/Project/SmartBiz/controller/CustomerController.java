@@ -41,4 +41,9 @@ public class CustomerController {
     public List<CustomerDto> getAllCustomers() {
         return customerService.getAllCustomers();
     }
+
+    @GetMapping("/name/{customerName}")
+    public CustomerDto getCustomerByName(@PathVariable String customerName) {
+        return customerService.getCustomerByName(customerName);
+    }
 }

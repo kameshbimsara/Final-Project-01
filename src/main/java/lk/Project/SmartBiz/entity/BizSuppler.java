@@ -25,6 +25,9 @@ public class BizSuppler {
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
+    @OneToMany(mappedBy = "supplier")
+    private List<Batch> batches;
+
     public BizSuppler(Integer id, String companyName, String contactNo, Business business) {
         this.id = id;
         this.companyName = companyName;

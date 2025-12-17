@@ -23,9 +23,11 @@ public class Business {
 
     @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Customer> customers;
+    @OneToMany(mappedBy = "business", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Orders> orders;
 
-    public Business(Integer id, String name) {
-        this.id = id;
+    public Business(String name, String type) {
         this.name = name;
+        this.type = type;
     }
 }

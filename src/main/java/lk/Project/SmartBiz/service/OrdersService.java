@@ -9,4 +9,5 @@ public interface OrdersService {
     void deleteOrder(Integer id);
     OrdersDto getOrderById(Integer id);
     List<OrdersDto> getAllOrders();
+    List<OrdersDto> getOrdersByCustomer(Integer customerId);
 }

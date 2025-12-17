@@ -47,4 +47,9 @@ public class BizSupplerController {
         return allBizSuppler;
     }
 
+    @GetMapping("/name/{companyName}")
+    public BizSupplerDto getBizSupplerByName(@PathVariable String companyName) {
+        return bizSupplerService.getBizSupplerByName(companyName);
+    }
+
 }

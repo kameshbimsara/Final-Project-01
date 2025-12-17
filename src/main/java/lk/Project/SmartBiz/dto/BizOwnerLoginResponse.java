@@ -7,4 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class BizOwnerLoginResponse {
     private String token;
+    private Integer ownerId;
+    private String ownerName;
 }

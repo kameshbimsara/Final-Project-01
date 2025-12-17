@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface BizOwnerRepo extends JpaRepository<BizOwner, Integer> {
-    Optional<BizOwner> findByUsername(String username);
-
+    Optional<BizOwner> findByEmail(String email);
+    Optional<BizOwner> findByNicNumber(String nicNumber);
 }

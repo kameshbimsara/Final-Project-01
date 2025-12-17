@@ -75,4 +75,13 @@ public class BizSupplerServiceImpl implements BizSupplerService {
                 ))
                 .toList();
     }
+
+    @Override
+    public BizSupplerDto getBizSupplerByName(String companyName) {
+        BizSuppler bizSupplers = bizSupplerRepo.findByCompanyName(companyName)
+                .orElseThrow(() -> new RuntimeException("BizSuppler not found"));
+        return new BizSupplerDto(bizSupplers.getId(), bizSupplers.getCompanyName(), bizSupplers.getContactNo(), bizSupplers.getBusiness().getId());
+    }
+
+
 }

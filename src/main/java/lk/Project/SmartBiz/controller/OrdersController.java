@@ -2,6 +2,7 @@ package lk.Project.SmartBiz.controller;
 
 import lk.Project.SmartBiz.dto.OrdersDto;
 import lk.Project.SmartBiz.service.OrdersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,4 +42,10 @@ public class OrdersController {
     public List<OrdersDto> getAllOrders() {
         return ordersService.getAllOrders();
     }
+
+    @GetMapping("/customer/{customerId}")
+    public List<OrdersDto> getOrdersByCustomer(@PathVariable Integer customerId) {
+        return ordersService.getOrdersByCustomer(customerId);
+    }
+
 }

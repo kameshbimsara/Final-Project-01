@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class BizOwnerDto {
     private Integer id;
     private String name;
-    private String username;
+    private String email;
     private String password;
+    private String nicNumber;
 }

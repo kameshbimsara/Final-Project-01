@@ -12,4 +12,9 @@ public class BusinessDto {
     private String name;
     private String type;
     private Integer owner_id;
+
+    public BusinessDto(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
 }

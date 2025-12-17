@@ -3,6 +3,8 @@ package lk.Project.SmartBiz.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 @Data
@@ -20,7 +22,11 @@ public class Batch {
     private Double unitPrice;
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private BizSuppler supplier;
 }

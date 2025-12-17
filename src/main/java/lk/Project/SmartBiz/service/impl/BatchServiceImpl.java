@@ -2,8 +2,10 @@ package lk.Project.SmartBiz.service.impl;
 
 import lk.Project.SmartBiz.dto.BatchDto;
 import lk.Project.SmartBiz.entity.Batch;
+import lk.Project.SmartBiz.entity.BizSuppler;
 import lk.Project.SmartBiz.entity.Product;
 import lk.Project.SmartBiz.repo.BatchRepo;
+import lk.Project.SmartBiz.repo.BizSupplerRepo;
 import lk.Project.SmartBiz.repo.ProductRepo;
 import lk.Project.SmartBiz.service.BatchService;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ public class BatchServiceImpl implements BatchService {
 
     private final BatchRepo batchRepo;
     private final ProductRepo productRepo;
+    private final BizSupplerRepo supplerRepo;
 
-    public BatchServiceImpl(BatchRepo batchRepo, ProductRepo productRepo) {
+    public BatchServiceImpl(BatchRepo batchRepo, ProductRepo productRepo , BizSupplerRepo supplerRepo) {
         this.batchRepo = batchRepo;
         this.productRepo = productRepo;
+        this.supplerRepo = supplerRepo;
     }
 
     @Override
@@ -31,6 +35,7 @@ public class BatchServiceImpl implements BatchService {
 
         Batch batch = new Batch();
         batch.setProduct(product);
+        batch.setSupplier(product.getSupplier());
         batch.setQuantity(dto.getQuantity());
         batch.setUnitPrice(dto.getUnitPrice());
         batch.setManufactureDate(dto.getManufactureDate());
@@ -48,25 +53,28 @@ public class BatchServiceImpl implements BatchService {
     @Override
     @Transactional
     public BatchDto updateBatch(Integer id, BatchDto dto) {
-        Batch existing = batchRepo.findById(id)
+        Batch batch = batchRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Batch not found"));
 
-        Product product = existing.getProduct();
+        batch.setManufactureDate(dto.getManufactureDate());
+        batch.setExpireDate(dto.getExpireDate());
+        batch.setUnitPrice(dto.getUnitPrice());
+        batch.setQuantity(dto.getQuantity());
 
-        int quantityDiff = dto.getQuantity() - existing.getQuantity();
-        product.setQuantity(product.getQuantity() + quantityDiff);
-        productRepo.save(product);
+        if (dto.getProductId() != null) {
+            Product product = productRepo.findById(dto.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            batch.setProduct(product);
+        }
 
-        existing.setQuantity(dto.getQuantity());
-        existing.setUnitPrice(dto.getUnitPrice());
-        existing.setManufactureDate(dto.getManufactureDate());
-        existing.setExpireDate(dto.getExpireDate());
+        if (dto.getSupplierId() != null) {
+            BizSuppler supplier = supplerRepo.findById(dto.getSupplierId())
+                    .orElseThrow(() -> new RuntimeException("Supplier not found"));
+            batch.setSupplier(supplier);
+        }
 
-        Batch updated = batchRepo.save(existing);
-
-        dto.setId(updated.getId());
-        dto.setProductId(updated.getProduct().getId());
-        return dto;
+        Batch updated = batchRepo.save(batch);
+        return mapToDto(updated);
     }
 
     @Override
@@ -93,8 +101,15 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public List<BatchDto> getAllBatches() {
         return batchRepo.findAll().stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+                .map(batch -> new BatchDto(
+                        batch.getId(),
+                        batch.getManufactureDate(),
+                        batch.getExpireDate(),
+                        batch.getUnitPrice(),
+                        batch.getQuantity(),
+                        batch.getProduct().getId(),
+                        batch.getSupplier().getId()
+                )).collect(Collectors.toList());
     }
 
     @Override
@@ -111,6 +126,7 @@ public class BatchServiceImpl implements BatchService {
         BatchDto dto = new BatchDto();
         dto.setId(batch.getId());
         dto.setProductId(batch.getProduct().getId());
+        dto.setSupplierId(batch.getSupplier().getId());
         dto.setQuantity(batch.getQuantity());
         dto.setUnitPrice(batch.getUnitPrice());
         dto.setManufactureDate(batch.getManufactureDate());

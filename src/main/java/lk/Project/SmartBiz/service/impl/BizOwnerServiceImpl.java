@@ -31,16 +31,18 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
     @Override
     public BizOwnerDtoReturn saveBizOwner(BizOwnerDto bizOwnerDto) {
-        if (bizOwnerRepo.findByUsername(bizOwnerDto.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already taken");
+        if (bizOwnerRepo.findByEmail(bizOwnerDto.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already taken");
+        }else if (bizOwnerRepo.findByNicNumber(bizOwnerDto.getNicNumber()).isPresent()) {
+            throw new RuntimeException("NIC Number already taken");
         }
 
         String encoded = passwordEncoder.encode(bizOwnerDto.getPassword());
 
-        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getUsername(),encoded,null);
+        BizOwner bizOwner = new BizOwner(null, bizOwnerDto.getName(), bizOwnerDto.getEmail(),encoded,bizOwnerDto.getNicNumber(),null);
         BizOwner save = bizOwnerRepo.save(bizOwner);
 
-        return new BizOwnerDtoReturn(save.getId(), save.getName(), save.getUsername());
+        return new BizOwnerDtoReturn(save.getId(), save.getName(), save.getEmail(),save.getNicNumber());
     }
 
     @Override
@@ -49,12 +51,12 @@ public class BizOwnerServiceImpl implements BizOwnerService {
                 .orElseThrow(() -> new RuntimeException("BizOwner not found"));
 
         bizOwner.setName(bizOwnerDto.getName());
-        bizOwner.setUsername(bizOwnerDto.getUsername());
+        bizOwner.setEmail(bizOwnerDto.getEmail());
         bizOwner.setPassword(bizOwnerDto.getPassword());
 
         BizOwner updated = bizOwnerRepo.save(bizOwner);
 
-        return new BizOwnerDtoReturn(updated.getId(), updated.getName(), updated.getUsername());
+        return new BizOwnerDtoReturn(updated.getId(), updated.getName(), updated.getEmail(),updated.getNicNumber());
     }
 
 
@@ -66,7 +68,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
 
         bizOwnerRepo.deleteById(id);
 
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword());
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getEmail(),bizOwner.getNicNumber(),bizOwner.getPassword());
     }
 
     @Override
@@ -74,7 +76,7 @@ public class BizOwnerServiceImpl implements BizOwnerService {
         BizOwner bizOwner = bizOwnerRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("BizOwner not found"));
 
-        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getUsername(), bizOwner.getPassword());
+        return new BizOwnerDto(bizOwner.getId(), bizOwner.getName(), bizOwner.getEmail(), bizOwner.getNicNumber(), bizOwner.getPassword());
     }
 
     @Override
@@ -83,7 +85,8 @@ public class BizOwnerServiceImpl implements BizOwnerService {
                 .map(owner -> new BizOwnerDtoReturn(
                         owner.getId(),
                         owner.getName(),
-                        owner.getUsername()
+                        owner.getEmail(),
+                        owner.getNicNumber()
                 ))
                 .collect(Collectors.toList());
     }
@@ -91,17 +94,19 @@ public class BizOwnerServiceImpl implements BizOwnerService {
     @Override
     public BizOwnerLoginResponse login(BizOwnerLoginRequest request) {
 
-        BizOwner owner = bizOwnerRepo.findByUsername(request.getUsername())
+        BizOwner owner = bizOwnerRepo.findByEmail(request.getUsername())
                 .orElseThrow(() -> new RuntimeException("Invalid username or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), owner.getPassword())) {
             throw new RuntimeException("Invalid username or password");
         }
 
-        String token = jwtUtil.generateToken(owner.getUsername(), "OWNER");
+        String token = jwtUtil.generateToken(owner.getEmail(), "OWNER");
 
         return new BizOwnerLoginResponse(
-                token
+                token,
+                owner.getId(),
+                owner.getName()
         );
     }
 

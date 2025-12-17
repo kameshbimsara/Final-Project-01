@@ -38,13 +38,14 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public BusinessDto updateBusiness(BusinessDto businessDto) {
-        Optional<Business> byId = businessRepo.findById(businessDto.getId());
+    public BusinessDto updateBusiness(Integer id, BusinessDto businessDto) {
+        Optional<Business> byId = businessRepo.findById(id);
         if (byId.isPresent()) {
             Business business = byId.get();
             business.setName(businessDto.getName());
-            Business update = businessRepo.save(business);
-            return new BusinessDto(update.getId(), update.getName(), update.getType(), update.getOwner().getId());
+            business.setType(businessDto.getType());
+            Business updatedBusiness = businessRepo.save(business);
+            return new BusinessDto(updatedBusiness.getId(), updatedBusiness.getName(), updatedBusiness.getType(), updatedBusiness.getOwner().getId());
         }
         return null;
     }
@@ -75,6 +76,23 @@ public class BusinessServiceImpl implements BusinessService {
         List<Business> all = businessRepo.findAll();
         return all.stream()
                 .map(business -> new BusinessDto(business.getId(), business.getName(),business.getType(), business.getOwner().getId()))
+                .toList();
+    }
+
+    @Override
+    public List<BusinessDto> getBusinessByOwnerId(Integer ownerId) {
+        BizOwner owner = bizOwnerRepo.findById(ownerId)
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+        List<Business> businessList = businessRepo.findByOwnerId(owner.getId());
+
+        return businessList.stream()
+                .map(b -> new BusinessDto(
+                        b.getId(),
+                        b.getName(),
+                        b.getType(),
+                        b.getOwner().getId()
+                ))
                 .toList();
     }
 

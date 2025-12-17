@@ -10,14 +10,15 @@ import java.util.List;
 public class OrdersDto {
 
     private Integer id;
-    private Integer customerId;
     private LocalDate date;
     private Integer totalAmount;
-    private List<OrderDetailsDto> orderDetails;
+    private Integer businessId;
+    private Integer customerId;
 
-    public OrdersDto(Integer id, Integer customerId, Integer totalAmount) {
-        this.id = id;
+    public OrdersDto(Integer customerId, LocalDate date, Integer totalAmount, Integer businessId) {
         this.customerId = customerId;
+        this.date = date;
         this.totalAmount = totalAmount;
+        this.businessId = businessId;
     }
 }

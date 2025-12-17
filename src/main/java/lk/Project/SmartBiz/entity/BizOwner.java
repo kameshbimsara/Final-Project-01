@@ -18,9 +18,10 @@ public class BizOwner {
     private String name;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
 
     private String password;
+    private String nicNumber;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Business> businesses;

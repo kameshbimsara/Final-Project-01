@@ -3,6 +3,8 @@ package lk.Project.SmartBiz.controller;
 import lk.Project.SmartBiz.dto.BusinessDto;
 import lk.Project.SmartBiz.service.BusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -24,9 +26,9 @@ public class BusinessController {
     }
 
     @PutMapping("/{id}")
-    public BusinessDto updateBusiness(@PathVariable("id") Integer id, @RequestBody BusinessDto businessDto) {
-        businessDto.setId(id);
-        return businessService.updateBusiness(businessDto);
+    public ResponseEntity<BusinessDto> updateBusiness(@PathVariable Integer id, @RequestBody BusinessDto businessDto) {
+        BusinessDto update = businessService.updateBusiness(id, businessDto);
+        return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -42,5 +44,10 @@ public class BusinessController {
     @GetMapping
     public List<BusinessDto> getAllBusiness() {
         return businessService.getAllBusiness();
+    }
+
+    @GetMapping("/owner/{ownerId}")
+    public ResponseEntity<List<BusinessDto>> getBusinessByOwner(@PathVariable Integer ownerId) {
+        return ResponseEntity.ok(businessService.getBusinessByOwnerId(ownerId));
     }
 }

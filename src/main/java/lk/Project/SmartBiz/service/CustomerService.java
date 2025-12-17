@@ -9,4 +9,5 @@ public interface CustomerService {
     void deleteCustomer(Integer id);
     CustomerDto getCustomerById(Integer id);
     List<CustomerDto> getAllCustomers();
+    CustomerDto getCustomerByName(String name);
 }

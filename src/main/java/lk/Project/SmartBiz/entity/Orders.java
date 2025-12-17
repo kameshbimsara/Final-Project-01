@@ -21,7 +21,7 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderDetails> orderDetails;
+    @JoinColumn(name = "business_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Business business;
 }
