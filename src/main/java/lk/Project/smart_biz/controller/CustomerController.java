@@ -49,7 +49,6 @@ public class CustomerController {
 
     @GetMapping("/business/{businessId}")
     public List<CustomerDto> getCustomersByBusiness(@PathVariable ("businessId") Integer businessId) {
-        System.out.println("Fetching customers for business ID: " + businessId);
         return customerService.getCustomersByBusiness(businessId);
     }
 

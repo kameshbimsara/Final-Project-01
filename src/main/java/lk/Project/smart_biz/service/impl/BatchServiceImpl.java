@@ -120,13 +120,15 @@ public class BatchServiceImpl implements BatchService {
     }
 
     private BatchDto mapToDto(Batch batch) {
-        BatchDto dto = new BatchDto();
-        dto.setId(batch.getId());
-        dto.setProductId(batch.getProduct().getId());
-        dto.setQuantity(batch.getQuantity());
-        dto.setUnitPrice(batch.getUnitPrice());
-        dto.setManufactureDate(batch.getManufactureDate());
-        dto.setExpireDate(batch.getExpireDate());
-        return dto;
+        return new BatchDto(
+                batch.getId(),
+                batch.getManufactureDate(),
+                batch.getExpireDate(),
+                batch.getUnitPrice(),
+                batch.getQuantity(),
+                batch.getProduct().getId(),
+                batch.getBizSuppler().getId(),
+                batch.getBusiness().getId()
+        );
     }
 }

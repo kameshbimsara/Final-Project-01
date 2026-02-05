@@ -40,9 +40,12 @@ public class BizSupplerController {
         return bizSupplerService.getAllBizSuppler();
     }
 
-    @GetMapping("/name/{companyName}")
-    public BizSupplerDto getBizSupplerByName(@PathVariable String companyName) {
-        return bizSupplerService.getBizSupplerByName(companyName);
+    @GetMapping("/business/{businessId}")
+    public List<BizSupplerDto> getSuppliersByBusinessId(
+            @PathVariable Integer businessId) {
+
+        return bizSupplerService.getSuppliersByBusinessId(businessId);
     }
+
 
 }

@@ -1,6 +1,7 @@
 package lk.Project.smart_biz.dto;
 
 import lombok.Data;
+import org.hibernate.mapping.List;
 
 @Data
 public class ProductDto {

@@ -13,6 +13,7 @@ public interface BizSupplerService {
     BizSupplerDto deleteBizSuppler(Integer id);
     BizSupplerDto getBizSupplerById(Integer id);
     List<BizSupplerDto> getAllBizSuppler();
-    BizSupplerDto getBizSupplerByName(String name);
+    List<BizSupplerDto> getSuppliersByBusinessId(Integer businessId);
+
 
 }
