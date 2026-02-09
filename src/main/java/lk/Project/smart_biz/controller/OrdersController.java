@@ -1,9 +1,12 @@
 package lk.Project.smart_biz.controller;
 
+import lk.Project.smart_biz.dto.DateReqDto;
 import lk.Project.smart_biz.dto.OrdersDto;
 import lk.Project.smart_biz.service.OrdersService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -45,6 +48,11 @@ public class OrdersController {
     @GetMapping("/customer/{customerId}")
     public List<OrdersDto> getOrdersByCustomer(@PathVariable Integer customerId) {
         return ordersService.getOrdersByCustomer(customerId);
+    }
+
+    @PostMapping("/orderDate")
+    public List<OrdersDto> getOrdersByDate(@RequestBody DateReqDto dateReqDto) {
+        return ordersService.getOrdersByDate(dateReqDto.getDate(), dateReqDto.getBusinessId());
     }
 
 }
