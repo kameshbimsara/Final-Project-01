@@ -15,4 +15,5 @@ public interface ProductService {
     ProductDto getProductById(Integer id);
     List<ProductDto> getAllProducts();
     ResponseEntity<ProductWithBatchDto> findByNameAndBusiness_Id(String name , Integer businessId);
+    ResponseEntity<ProductDto> findProductByNameAndBusinessId(String name, Integer businessId);
 }

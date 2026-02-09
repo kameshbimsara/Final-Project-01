@@ -1,7 +1,9 @@
 package lk.Project.smart_biz.controller;
 
 import lk.Project.smart_biz.dto.CustomerDto;
+import lk.Project.smart_biz.dto.CustomerReqDto;
 import lk.Project.smart_biz.service.CustomerService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +52,11 @@ public class CustomerController {
     @GetMapping("/business/{businessId}")
     public List<CustomerDto> getCustomersByBusiness(@PathVariable ("businessId") Integer businessId) {
         return customerService.getCustomersByBusiness(businessId);
+    }
+
+    @PostMapping("/phoneNumber")
+    public ResponseEntity<CustomerDto> getCustomerByPhoneNumber(@RequestBody CustomerReqDto customerReqDto) {
+        return customerService.getCustomerByPhoneNumber(customerReqDto.getPhoneNumber(), customerReqDto.getBusinessId());
     }
 
 

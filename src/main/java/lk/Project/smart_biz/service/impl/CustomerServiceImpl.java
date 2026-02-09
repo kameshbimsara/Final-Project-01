@@ -6,6 +6,7 @@ import lk.Project.smart_biz.entity.Customer;
 import lk.Project.smart_biz.repo.BusinessRepo;
 import lk.Project.smart_biz.repo.CustomerRepo;
 import lk.Project.smart_biz.service.CustomerService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -106,6 +107,15 @@ public class CustomerServiceImpl implements CustomerService {
             customerDtos.add(dto);
         }
         return customerDtos;
+    }
+
+    @Override
+    public ResponseEntity<CustomerDto> getCustomerByPhoneNumber(String phone, Integer businessId) {
+        Customer customer = customerRepo.findByPhoneAndBusiness_Id(phone, businessId)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
+        CustomerDto dto = toDto(customer);
+        return ResponseEntity.ok(dto);
     }
 
 

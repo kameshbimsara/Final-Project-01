@@ -1,8 +1,10 @@
 package lk.Project.smart_biz.controller;
 
 import lk.Project.smart_biz.dto.BizSupplerDto;
+import lk.Project.smart_biz.dto.SupplerReqDto;
 import lk.Project.smart_biz.service.BizSupplerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +47,10 @@ public class BizSupplerController {
             @PathVariable Integer businessId) {
 
         return bizSupplerService.getSuppliersByBusinessId(businessId);
+    }
+    @PostMapping("/phoneNumber")
+    public ResponseEntity<BizSupplerDto> getSupplierByPhoneNumber(@RequestBody SupplerReqDto supplierReqDto) {
+        return bizSupplerService.getSupplierByPhoneNumber(supplierReqDto.getPhoneNumber(), supplierReqDto.getBusinessId());
     }
 
 

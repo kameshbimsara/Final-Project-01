@@ -1,6 +1,7 @@
 package lk.Project.smart_biz.service;
 
 import lk.Project.smart_biz.dto.BizSupplerDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public interface BizSupplerService {
     BizSupplerDto getBizSupplerById(Integer id);
     List<BizSupplerDto> getAllBizSuppler();
     List<BizSupplerDto> getSuppliersByBusinessId(Integer businessId);
+    ResponseEntity<BizSupplerDto> getSupplierByPhoneNumber(String phoneNumber, Integer businessId);
 
 
 }

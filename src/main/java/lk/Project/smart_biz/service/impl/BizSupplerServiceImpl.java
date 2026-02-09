@@ -7,6 +7,7 @@ import lk.Project.smart_biz.repo.BatchRepo;
 import lk.Project.smart_biz.repo.BizSupplerRepo;
 import lk.Project.smart_biz.repo.BusinessRepo;
 import lk.Project.smart_biz.service.BizSupplerService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -92,6 +93,21 @@ public class BizSupplerServiceImpl implements BizSupplerService {
                 .toList();
     }
 
+    @Override
+    public ResponseEntity<BizSupplerDto> getSupplierByPhoneNumber(String phoneNumber, Integer businessId) {
+        Optional<BizSuppler> supplierOpt = bizSupplerRepo.findByContactNoAndBusiness_Id(phoneNumber, businessId);
+        if (supplierOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        BizSuppler supplier = supplierOpt.get();
+        BizSupplerDto dto = new BizSupplerDto(
+                supplier.getId(),
+                supplier.getCompanyName(),
+                supplier.getContactNo(),
+                supplier.getBusiness().getId());
+        return ResponseEntity.ok(dto);
+    }
 
 
 }

@@ -38,23 +38,22 @@ public class OrdersServiceImpl implements OrdersService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         Business business = businessRepo.findById(dto.getBusinessId())
                 .orElseThrow(() -> new RuntimeException("Business not found"));
-        Product product = productRepo.findById(dto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Orders order = new Orders();
         order.setId(dto.getId());
         order.setCustomer(customer);
         order.setBusiness(business);
-        order.setProduct(product);
         order.setDate(LocalDate.now());
         order.setTotalAmount(dto.getTotalAmount());
 
         List<OrderDetails> orderDetailsList = dto.getOrderDetails().stream()
                 .map(orderDetails -> {
+                    Product product = productRepo.findById(orderDetails.getProductId())
+                            .orElseThrow(() -> new RuntimeException("Product not found"));
                     OrderDetails orderDetail = new OrderDetails();
-                    orderDetail.setId(orderDetails.getId());
                     orderDetail.setQuantity(orderDetails.getQuantity());
                     orderDetail.setPrice(orderDetails.getPrice());
+                    orderDetail.setProduct(product);
                     orderDetail.setOrder(order);
                     return orderDetail;
                 })
@@ -63,7 +62,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders savedOrder = ordersRepo.save(order);
 
-        return new OrdersDto(savedOrder.getId(),savedOrder.getDate(),savedOrder.getTotalAmount(), savedOrder.getBusiness().getId(),savedOrder.getCustomer().getId(),savedOrder.getProduct().getId(),dto.getOrderDetails());
+        return new OrdersDto(savedOrder.getId(),savedOrder.getDate(),savedOrder.getTotalAmount(), savedOrder.getBusiness().getId(),savedOrder.getCustomer().getId(),dto.getOrderDetails());
 
 
     }
@@ -83,9 +82,6 @@ public class OrdersServiceImpl implements OrdersService {
         order.setBusiness(dto.getBusinessId() != null ?
                 businessRepo.findById(dto.getBusinessId())
                         .orElseThrow(() -> new RuntimeException("Business not found")) : order.getBusiness());
-        order.setProduct(dto.getProductId() != null ?
-                productRepo.findById(dto.getProductId())
-                        .orElseThrow(() -> new RuntimeException("Product not found")) : order.getProduct());
 
         if (dto.getOrderDetails() != null) {
             order.getOrder_details().clear();
@@ -101,7 +97,7 @@ public class OrdersServiceImpl implements OrdersService {
 
         Orders saved = ordersRepo.save(order);
 
-        return new OrdersDto(saved.getId(),saved.getDate(),saved.getTotalAmount(),saved.getBusiness().getId(),saved.getCustomer().getId(),saved.getProduct().getId(),dto.getOrderDetails());
+        return new OrdersDto(saved.getId(),saved.getDate(),saved.getTotalAmount(),saved.getBusiness().getId(),saved.getCustomer().getId(),dto.getOrderDetails());
     }
 
     @Override
@@ -119,11 +115,11 @@ public class OrdersServiceImpl implements OrdersService {
         ArrayList<OrderDetailsDto> orderDetailsDtos = new ArrayList<>();
 
         for (OrderDetails ent : order.getOrder_details()) {
-            OrderDetailsDto dto = new OrderDetailsDto(ent.getId(), ent.getQuantity(), ent.getPrice(), ent.getOrder().getId());
+            OrderDetailsDto dto = new OrderDetailsDto(ent.getId(), ent.getQuantity(), ent.getPrice(),ent.getProduct().getId(), ent.getOrder().getId());
             orderDetailsDtos.add(dto);
         }
 
-        return new OrdersDto(order.getId(),order.getDate(), order.getTotalAmount(), order.getBusiness().getId(), order.getCustomer().getId(),order.getProduct().getId(),orderDetailsDtos);
+        return new OrdersDto(order.getId(),order.getDate(), order.getTotalAmount(), order.getBusiness().getId(), order.getCustomer().getId(),orderDetailsDtos);
     }
 
     @Override
@@ -135,10 +131,9 @@ public class OrdersServiceImpl implements OrdersService {
                         order.getTotalAmount(),
                         order.getBusiness().getId(),
                         order.getCustomer().getId(),
-                        order.getProduct().getId(),
                         order.getOrder_details().stream().map(orderDetails
                                 -> new OrderDetailsDto(orderDetails.getId(),
-                                orderDetails.getQuantity(),orderDetails.getPrice(),orderDetails.getOrder().getId())).collect(Collectors.toList())
+                                orderDetails.getQuantity(),orderDetails.getPrice(),orderDetails.getProduct().getId(),orderDetails.getOrder().getId())).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }
@@ -154,10 +149,9 @@ public class OrdersServiceImpl implements OrdersService {
                         order.getTotalAmount(),
                         order.getBusiness().getId(),
                         order.getCustomer().getId(),
-                        order.getProduct().getId(),
                         order.getOrder_details().stream().map(orderDetails
                                 -> new OrderDetailsDto(orderDetails.getId(), orderDetails.getQuantity(),
-                                orderDetails.getPrice(), orderDetails.getId())).collect(Collectors.toList())
+                                orderDetails.getPrice(),orderDetails.getProduct().getId(), orderDetails.getId())).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
     }

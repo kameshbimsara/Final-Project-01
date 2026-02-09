@@ -22,12 +22,10 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
     @JoinColumn(name = "business_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Business business;
-    @JoinColumn(name = "product_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

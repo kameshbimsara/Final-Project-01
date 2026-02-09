@@ -118,6 +118,16 @@ public class ProductServiceImpl implements ProductService {
         return ResponseEntity.ok(responseDto);
     }
 
+    @Override
+    public ResponseEntity<ProductDto> findProductByNameAndBusinessId(String name, Integer businessId) {
+        Optional<Product> productOpt = productRepo.findByNameAndBusiness_Id(name, businessId);
+        if (productOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        ProductDto dto = mapToDto(productOpt.get());
+        return ResponseEntity.ok(dto);
+    }
+
     private ProductDto mapToDto(Product product) {
         ProductDto dto = new ProductDto(product.getId(), product.getName(), product.getBrand(), product.getDescription());
         if (product.getBusiness() != null) dto.setBusinessId(product.getBusiness().getId());

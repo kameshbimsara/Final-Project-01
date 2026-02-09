@@ -1,6 +1,7 @@
 package lk.Project.smart_biz.service;
 
 import lk.Project.smart_biz.dto.CustomerDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface CustomerService {
     CustomerDto getCustomerByName(String name);
 
     List<CustomerDto> getCustomersByBusiness(Integer businessId);
+
+    ResponseEntity<CustomerDto> getCustomerByPhoneNumber(String phone, Integer businessId);
 }

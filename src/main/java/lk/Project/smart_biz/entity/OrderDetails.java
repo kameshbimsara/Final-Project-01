@@ -24,4 +24,8 @@ public class OrderDetails {
     @JoinColumn(name = "order_id", nullable = false)
     @JsonBackReference
     private Orders order;
+
+    @JoinColumn(name = "product_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Product product;
 }

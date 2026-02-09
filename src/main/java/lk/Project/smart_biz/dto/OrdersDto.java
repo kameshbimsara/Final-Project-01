@@ -17,7 +17,6 @@ public class OrdersDto {
     private Integer totalAmount;
     private Integer businessId;
     private Integer customerId;
-    private Integer productId;
     private List<OrderDetailsDto> orderDetails;
 
 }

@@ -47,14 +47,14 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-//    @GetMapping("/search")
-//    public ProductDto findByNameAndBusiness_Id(@RequestParam String name, @RequestParam Integer businessId) {
-//        return productService.findByNameAndBusiness_Id(name, businessId);
-//    }
-
     @PostMapping("/product_with_batches")
     public ResponseEntity<ProductWithBatchDto> productWithBatches(@RequestBody ProductRequestDto productRequestDto) {
         return productService.findByNameAndBusiness_Id(productRequestDto.getProductName(), productRequestDto.getBusinessId());
+    }
+
+    @PostMapping("/productName")
+    public ResponseEntity<ProductDto> getProductByNameAndBusinessId(@RequestBody ProductRequestDto productRequestDto) {
+        return productService.findProductByNameAndBusinessId(productRequestDto.getProductName(), productRequestDto.getBusinessId());
     }
 
 }
