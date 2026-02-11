@@ -46,4 +46,5 @@ public class BatchController {
     public List<BatchDto> getBatchesByProduct(@PathVariable Integer productId) {
         return batchService.getBatchesByProduct(productId);
     }
+
 }

@@ -1,6 +1,7 @@
 package lk.Project.smart_biz.controller;
 
 import lk.Project.smart_biz.dto.DateReqDto;
+import lk.Project.smart_biz.dto.OrderCustomerReqDto;
 import lk.Project.smart_biz.dto.OrdersDto;
 import lk.Project.smart_biz.service.OrdersService;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,11 @@ public class OrdersController {
     @PostMapping("/orderDate")
     public List<OrdersDto> getOrdersByDate(@RequestBody DateReqDto dateReqDto) {
         return ordersService.getOrdersByDate(dateReqDto.getDate(), dateReqDto.getBusinessId());
+    }
+
+    @PostMapping("/customerPhone")
+    public List<OrdersDto> getOrderByCustomerPhone(@RequestBody OrderCustomerReqDto orderCustomerReqDto) {
+        return ordersService.getOrderByCustomerPhone(orderCustomerReqDto.getCustomerPhone(),orderCustomerReqDto.getBusinessId());
     }
 
 }

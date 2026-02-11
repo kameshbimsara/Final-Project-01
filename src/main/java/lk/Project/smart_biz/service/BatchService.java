@@ -16,4 +16,5 @@ public interface BatchService {
     List<BatchDto> getAllBatches();
 
     List<BatchDto> getBatchesByProduct(Integer productId);
+
 }

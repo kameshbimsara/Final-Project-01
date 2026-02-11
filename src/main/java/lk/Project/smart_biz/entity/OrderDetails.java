@@ -18,7 +18,8 @@ public class OrderDetails {
     private Integer id;
 
     private Integer quantity;
-    private Integer price;
+    private Double unitPrice;
+    private Double price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)

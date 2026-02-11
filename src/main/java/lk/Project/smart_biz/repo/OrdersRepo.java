@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface OrdersRepo extends JpaRepository<Orders, Integer> {
     List<Orders> findByCustomer(Customer customer);
     List<Orders> findByDateAndBusiness(LocalDate date, Business business);
+    List<Orders> findByCustomer_PhoneAndBusiness_Id(String customerPhone, Integer businessId);
 }

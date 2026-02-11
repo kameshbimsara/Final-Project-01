@@ -14,4 +14,5 @@ public interface OrdersService {
     List<OrdersDto> getAllOrders();
     List<OrdersDto> getOrdersByCustomer(Integer customerId);
     List<OrdersDto> getOrdersByDate(LocalDate date, Integer businessId);
+    List<OrdersDto> getOrderByCustomerPhone(String customerPhone, Integer businessId);
 }
