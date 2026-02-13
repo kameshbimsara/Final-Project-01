@@ -20,5 +20,6 @@ public interface BatchRepo extends JpaRepository<Batch, Integer> {
     Integer getAvailableQuantity(@Param("productId") Integer productId);
 
     List<Batch> findByProductOrderByExpireDateAsc(Product product);
+    List<Batch> findByBusiness_Id(Integer businessId);
 
 }

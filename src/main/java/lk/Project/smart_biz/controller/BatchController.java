@@ -47,4 +47,9 @@ public class BatchController {
         return batchService.getBatchesByProduct(productId);
     }
 
+    @GetMapping("/business/{businessId}")
+    public List<BatchDto> getBatchesByBusinessId(@PathVariable Integer businessId) {
+        return batchService.getBatchesByBusinessId(businessId);
+    }
+
 }

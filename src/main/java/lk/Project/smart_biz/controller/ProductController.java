@@ -57,4 +57,9 @@ public class ProductController {
         return productService.findProductByNameAndBusinessId(productRequestDto.getProductName(), productRequestDto.getBusinessId());
     }
 
+    @GetMapping("/business/{businessId}")
+    public List<ProductDto> getProductsByBusinessId(@PathVariable Integer businessId) {
+        return productService.getProductsByBusinessId(businessId);
+    }
+
 }

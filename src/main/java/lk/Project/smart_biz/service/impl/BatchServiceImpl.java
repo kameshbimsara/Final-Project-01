@@ -13,6 +13,7 @@ import lk.Project.smart_biz.service.BatchService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,6 +118,16 @@ public class BatchServiceImpl implements BatchService {
         return batchRepo.findByProduct(product).stream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BatchDto> getBatchesByBusinessId(Integer businessId) {
+        List<Batch> batches = batchRepo.findByBusiness_Id(businessId);
+        List<BatchDto> batchDtos = new ArrayList<>();
+        for (Batch batch : batches) {
+            batchDtos.add(mapToDto(batch));
+        }
+        return batchDtos;
     }
 
     private BatchDto mapToDto(Batch batch) {

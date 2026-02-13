@@ -61,4 +61,9 @@ public class OrdersController {
         return ordersService.getOrderByCustomerPhone(orderCustomerReqDto.getCustomerPhone(),orderCustomerReqDto.getBusinessId());
     }
 
+    @GetMapping("/business/{businessId}")
+    public List<OrdersDto> getOrdersByBusinessId(@PathVariable Integer businessId) {
+        return ordersService.getOrdersByBusinessId(businessId);
+    }
+
 }

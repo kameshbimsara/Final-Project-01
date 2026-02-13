@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -126,6 +127,17 @@ public class ProductServiceImpl implements ProductService {
         }
         ProductDto dto = mapToDto(productOpt.get());
         return ResponseEntity.ok(dto);
+    }
+
+    @Override
+    public List<ProductDto> getProductsByBusinessId(Integer businessId) {
+        List<Product> products = productRepo.findByBusinessId(businessId);
+
+        List<ProductDto> productDtos = new ArrayList<>();
+        for (Product product : products) {
+            productDtos.add(mapToDto(product));
+        }
+        return productDtos;
     }
 
     private ProductDto mapToDto(Product product) {

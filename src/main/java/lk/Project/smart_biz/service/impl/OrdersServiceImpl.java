@@ -298,5 +298,33 @@ public class OrdersServiceImpl implements OrdersService {
 
     }
 
+    @Override
+    public List<OrdersDto> getOrdersByBusinessId(Integer businessId) {
+        List<Orders> ordersList = ordersRepo.findByBusinessId(businessId);
+        if (ordersList.isEmpty()) {
+            throw new RuntimeException("No orders found for business: " + businessId);
+        }
+        return ordersList.stream()
+                .map(orders -> new OrdersDto(
+                        orders.getId(),
+                        orders.getDate(),
+                        orders.getTotalAmount(),
+                        orders.getBusiness().getId(),
+                        orders.getCustomer().getId(),
+                        orders.getOrder_details().stream().
+                                map(od -> new OrderDetailsDto(
+                                        od.getId(),
+                                        od.getQuantity(),
+                                        od.getProduct().getId(),
+                                        od.getUnitPrice(),
+                                        od.getPrice(),
+                                        od.getOrder().getId()
+                                ))
+                                .collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 
 }
